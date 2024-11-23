@@ -1,21 +1,21 @@
-# Cliff Walking Q-Learning Implementation
+# Cliff Walking TD Learning Implementation
 
 ## Overview
-This repository implements Q-learning algorithms for the Cliff Walking environment, demonstrating the differences between Epsilon-Greedy and Softmax exploration strategies. The implementation includes comprehensive metrics collection, visualization tools, and analysis capabilities.
+This repository implements TD learning algorithms for the Cliff Walking environment, demonstrating the differences between Epsilon-Greedy and Softmax exploration strategies. The implementation includes comprehensive metrics collection, visualization tools, and analysis capabilities.
 
 ## Mathematical Foundation
 
-### Q-Learning Update Rule
-The Q-learning algorithm updates action-values using the following equation:
+### TD Learning Update Rule
+The TD learning algorithm updates state values using the following equation:
 
-$$Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha[r_{t+1} + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t)]$$
+$$V(s_t) \leftarrow V(s_t) + \alpha[r_{t+1} + \gamma V(s_{t+1}) - V(s_t)]$$
 
 where:
-- $Q(s_t, a_t)$ is the value of taking action $a_t$ in state $s_t$
+- $V(s_t)$ is the value of state $s_t$
 - $\alpha$ is the learning rate
 - $\gamma$ is the discount factor
 - $r_{t+1}$ is the immediate reward
-- $\max_{a} Q(s_{t+1}, a)$ is the maximum Q-value for the next state
+- $V(s_{t+1})$ is the value of the next state
 
 ### Exploration Strategies
 
@@ -78,21 +78,17 @@ env = CliffWalkingEnvironment()
 epsilon_greedy = EpsilonGreedyPolicy(env)
 softmax = SoftmaxPolicy(env)
 
-# Train using different policies
+# Train using TD Learning
 td_learner = TDLearner(env)
 results = td_learner.learn(epsilon_greedy, episodes=500)
-
-# Visualize results
-plot_value_function_heatmap(env, results['metrics'])
-plot_training_progress(results['metrics'])
 ```
 
 ## Performance Analysis
 
 ### Convergence
-The value function converges according to the Bellman equation:
+The value function converges according to the TD target:
 
-$$V^*(s) = \max_a \sum_{s'} P(s'|s,a)[r(s,a,s') + \gamma V^*(s')]$$
+$$V(s_t) \rightarrow \mathbb{E}[r_{t+1} + \gamma V(s_{t+1})]$$
 
 ### Exploration-Exploitation Trade-off
 - Epsilon-Greedy: Linear decay of exploration rate

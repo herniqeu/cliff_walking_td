@@ -1,5 +1,3 @@
-Here's a technical report based on the provided code and README:
-
 # Technical Report: Implementation and Analysis of TD Learning Strategies in Cliff Walking Environment
 
 ## 1. Introduction

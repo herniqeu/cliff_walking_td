@@ -1,10 +1,10 @@
 Here's a technical report based on the provided code and README:
 
-# Technical Report: Implementation and Analysis of Q-Learning Strategies in Cliff Walking Environment
+# Technical Report: Implementation and Analysis of TD Learning Strategies in Cliff Walking Environment
 
 ## 1. Introduction
 
-This report analyzes an implementation of Q-learning algorithms applied to the Cliff Walking environment, comparing two distinct exploration strategies: Epsilon-Greedy and Softmax policies. The implementation leverages modern Python libraries and provides comprehensive metrics collection and visualization capabilities.
+This report analyzes an implementation of TD learning algorithms applied to the Cliff Walking environment, comparing two distinct exploration strategies: Epsilon-Greedy and Softmax policies. The implementation leverages modern Python libraries and provides comprehensive metrics collection and visualization capabilities.
 
 ## 2. Technical Architecture
 
@@ -20,7 +20,7 @@ This report analyzes an implementation of Q-learning algorithms applied to the C
    - SoftmaxPolicy: Temperature-based probabilistic selection
 
 3. **Learning System (TDLearner)**
-   - Implements Q-learning with configurable parameters
+   - Implements TD learning with configurable parameters
    - Comprehensive metrics collection
    - Training phase management
 
@@ -40,14 +40,14 @@ class TrainingMetrics:
 
 ## 3. Algorithm Implementation
 
-### 3.1 Q-Learning Update
+### 3.1 TD Learning Update
 
-The implementation follows the standard Q-learning update rule:
+The implementation follows the standard TD learning update rule:
 
 ```python
-td_target = reward + gamma * q_table[next_state][best_next_action]
-td_error = td_target - q_table[state][action]
-q_table[state][action] += alpha * td_error
+td_target = reward + gamma * value_table[next_state]
+td_error = td_target - value_table[state]
+value_table[state] += alpha * td_error
 ```
 
 ### 3.2 Exploration Strategies
@@ -167,17 +167,17 @@ The implementation defines four distinct training phases:
 ## 7.3 Value Function Analysis
 
 ### Epsilon-Greedy Value Function
-- Clear gradient from start (bottom-left) to goal (bottom-right)
-- Safe path along bottom row (values -12.4 to -2.97)
-- Strong negative values near cliff edge (row 1)
-- Conservative value estimates overall
+- Direct state value estimates from TD learning
+- Clear gradient from start to goal states
+- Value estimates represent expected cumulative rewards
+- Conservative estimates near cliff edge
 
 ### Softmax Value Function
-- Similar gradient pattern but with key differences:
-  - Less extreme negative values (-10.92 minimum)
-  - More optimistic estimates near the goal
-  - Smoother value transitions between states
-  - Better differentiation in safe path values
+- Similar gradient pattern but with differences:
+  - More optimistic state value estimates
+  - Smoother transitions between adjacent states
+  - Better differentiation of safe paths
+  - More efficient value propagation
 
 ## 7.4 Comparative Advantages
 
